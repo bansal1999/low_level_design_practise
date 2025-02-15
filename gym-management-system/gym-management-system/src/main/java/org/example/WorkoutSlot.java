@@ -60,6 +60,8 @@ public class WorkoutSlot {
                 || date.isEqual(endDate);
     }
 
+    //testing
+
     public int getAvailableSeats(LocalDate date) {
         if (!isAvailable(date))
             return 0;
