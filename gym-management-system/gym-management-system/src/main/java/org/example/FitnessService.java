@@ -55,13 +55,17 @@ public class FitnessService {
         }
 
         //TODO: check weekly booking limit
+        if (exceedsWeeklyBookingLimit(user, date)) {
+            throw new IllegalStateException("Weekly booking limit exceeded");
+        }
+
 
         //fIND MATCHING workout slot
         WorkoutSlot targetSlot = null;
         for (WorkoutSlot slot : center.getWorkoutSlots()) {
             if (slot.getWorkoutType().equals(workoutType) &&
-                    slot.getStartDate().equals(startTime) &&
-                    slot.getEndDate().equals(endTime) &&
+                    slot.getStartTime().equals(startTime) &&
+                    slot.getEndTime().equals(endTime) &&
                     slot.isAvailable(date)) {
                 targetSlot = slot;
                 break;
@@ -80,6 +84,18 @@ public class FitnessService {
     }
 
     //todo: exceedWeeklyBookingsLimit()
+    private boolean exceedsWeeklyBookingLimit(User user, LocalDate bookingDate) {
+        LocalDate weekStart = bookingDate.minusDays(bookingDate.getDayOfWeek().getValue() - 1);
+        LocalDate weekEnd = weekStart.plusDays(6);
+
+        long weeklyBookings = user.getBookings().stream()
+                .filter(booking ->
+                        !booking.getDate().isBefore(weekStart) &&
+                                !booking.getDate().isAfter(weekEnd))
+                .count();
+
+        return weeklyBookings >= MAX_WEEKLY_BOOKINGS;
+    }
 
     //View schedule of a user
     public List<Booking> viewSchedule(String email, LocalDate date) {

@@ -31,7 +31,7 @@ public class Main {
             // Book sessions
             LocalDate bookingDate = LocalDate.parse("20-09-24", dateFormatter);
             service.bookSession("john123@gmail.com", "Koramangla", "Weights",
-                    LocalTime.of(7, 0), LocalTime.of(8, 0), bookingDate);
+                    LocalTime.of(6, 0), LocalTime.of(7, 0), bookingDate);
 
             // View schedule
             System.out.println("John's schedule for " + bookingDate + ":");
