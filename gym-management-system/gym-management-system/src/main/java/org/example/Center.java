@@ -1,15 +1,15 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Center {
-    private String location;
+    private final String location;
     private List<WorkoutSlot> workoutSlots;
-    //
 
-    public Center(String location, List<WorkoutSlot> workoutSlots) {
+    public Center(String location) {
         this.location = location;
-        this.workoutSlots = workoutSlots;
+        this.workoutSlots = new ArrayList<>();
     }
 
     public String getLocation() {

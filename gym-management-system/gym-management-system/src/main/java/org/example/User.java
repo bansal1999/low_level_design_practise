@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private String name;
-    private String email;
-    private String location;
+    private final String name;
+    private final String email;
+    private final String location;
     private List<Booking> bookings;
 
     public User(String name, String email, String location) {

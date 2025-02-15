@@ -1,19 +1,18 @@
 package org.example;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutSlot {
 
-    private String workoutType;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private int capacity;
+    private final String workoutType;
+    private final LocalTime startTime;
+    private final LocalTime endTime;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final int capacity;
     private List<Booking> bookings;
 
     public WorkoutSlot(String workoutType, LocalTime startTime, LocalTime endTime, LocalDate endDate, LocalDate startDate, int capacity) {
@@ -60,8 +59,6 @@ public class WorkoutSlot {
                 || date.isEqual(endDate);
     }
 
-    //testing
-
     public int getAvailableSeats(LocalDate date) {
         if (!isAvailable(date))
             return 0;
@@ -71,6 +68,4 @@ public class WorkoutSlot {
                 .count();
         return (int) (capacity - bookedSeats);
     }
-
-
 }
