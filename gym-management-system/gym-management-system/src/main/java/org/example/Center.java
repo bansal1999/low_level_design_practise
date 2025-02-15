@@ -5,6 +5,7 @@ import java.util.List;
 public class Center {
     private String location;
     private List<WorkoutSlot> workoutSlots;
+    //
 
     public Center(String location, List<WorkoutSlot> workoutSlots) {
         this.location = location;
