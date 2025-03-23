@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="gym-management-system" />
         <module name="untitled" />
         <module name="IRCTC-train-booking" />
         <module name="shikhar" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gym-management-system" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
