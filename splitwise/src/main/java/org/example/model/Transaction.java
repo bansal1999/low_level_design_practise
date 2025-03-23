@@ -9,7 +9,7 @@ public class Transaction {
     private double amount;
     private Date createdAt;
 
-    public Transaction(String id, User from, User to, double amount, Date createdAt) {
+    public Transaction(String id, User from, User to, double amount) {
         this.id = id;
         this.from = from;
         this.to = to;
@@ -38,7 +38,7 @@ public class Transaction {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Transaction{" +
                 "id='" + id + '\'' +
                 ", from=" + from.getName() +

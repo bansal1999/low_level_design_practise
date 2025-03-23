@@ -1,5 +1,6 @@
 package org.example.model;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class User {
@@ -40,7 +41,18 @@ public class User {
         }
     }
 
-
-
-
+    public void printBalances() {
+        System.out.println("Balances for " + name + ":");
+        if (userVsBalances.isEmpty()) {
+            System.out.println("No balances found.");
+            return;
+        }
+        for (Map.Entry<String, Double> entry : userVsBalances.entrySet()) {
+            if (entry.getValue() > 0) {
+                System.out.println("Owes $" + entry.getValue() + " to user with id " + entry.getKey());
+            } else {
+                System.out.println("Is Owed $" + Math.abs(entry.getValue()) + " to user with id " + entry.getKey());
+            }
+        }
+    }
 }

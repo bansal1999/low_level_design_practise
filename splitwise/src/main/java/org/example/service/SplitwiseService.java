@@ -5,8 +5,10 @@ import org.example.model.Expense;
 import org.example.model.Group;
 import org.example.model.Transaction;
 import org.example.model.User;
+import org.example.split.PercentSplit;
 import org.example.split.Split;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,18 +116,86 @@ public class SplitwiseService implements ExpenseService {
         return expense;
     }
 
+    private void validateEqualSplit(List<Split> splits, double amount) {
+        double splitAmount = amount / splits.size();
+        for (Split split : splits) {
+            split.setAmount(splitAmount);
+        }
+    }
+
+    private void validatePercentageSplit(List<Split> splits, double amount) {
+        double totalPercentage = 0;
+        for (Split split : splits) {
+            if (split instanceof PercentSplit) {
+                PercentSplit percentSplit = (PercentSplit) split;
+                totalPercentage += percentSplit.getPercentage();
+            }
+        }
+        if (Math.abs(totalPercentage - 100.0) > 0.001) {
+            throw new IllegalArgumentException("Total percentage should be 100%");
+        }
+        for (Split split : splits) {
+            if (split instanceof PercentSplit) {
+                PercentSplit percentSplit = (PercentSplit) split;
+                split.setAmount((percentSplit.getPercentage() / 100) * amount);
+            }
+        }
+    }
+
+    private void validateExactSplit(List<Split> splits, double amount) {
+        double totalAmount = 0;
+        for (Split split : splits) {
+            totalAmount += split.getAmount();
+        }
+        if (Math.abs(totalAmount - amount) > 0.001) {
+            throw new IllegalArgumentException("Total amount should match the expense amount");
+        }
+    }
+
+
     @Override
     public Transaction settleBalance(User from, User to, double amount) {
-        return null;
+        String transactionId = "t" + transactionIdCounter.incrementAndGet();
+        //update balance
+        from.updateBalance(from.getId(), -amount);
+        to.updateBalance(to.getId(), amount);
+
+        Transaction transaction = new Transaction(transactionId, from, to, amount);
+        transactions.add(transaction);
+        return transaction;
     }
 
     @Override
     public List<Expense> getUserExpenses(String userId) {
-        return List.of();
+        List<Expense> userExpenses = new ArrayList<>();
+
+        for (Group group : groups.values()) {
+            for (Expense expense : group.getExpenses()) {
+                if (expense.getPaidBy().getId().equals(userId)) {
+                    userExpenses.add(expense);
+                } else {
+                    for (Split split : expense.getSplits()) {
+                        if (split.getUser().getId().equals(userId)) {
+                            userExpenses.add(expense);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return userExpenses;
     }
 
     @Override
     public List<Transaction> getUserTransaction(String userId) {
-        return List.of();
+        List<Transaction> userTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getFrom().getId().equals(userId) ||
+                    transaction.getTo().getId().equals(userId)) {
+                userTransactions.add(transaction);
+            }
+        }
+        return userTransactions;
     }
 }
