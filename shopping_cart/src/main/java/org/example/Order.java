@@ -14,7 +14,7 @@ public class Order {
     private LocalDateTime orderDate;
     private String shippingAddress;
 
-    public Order(String orderId, String userId, List<OrderItem> items, double totalAmount, OrderStatus orderStatus, LocalDateTime orderDate, String shippingAddress) {
+    public Order(String orderId, String userId, List<OrderItem> items, double totalAmount, String shippingAddress) {
         this.orderId = orderId;
         this.userId = userId;
         this.items = new ArrayList<>(items);

@@ -10,9 +10,9 @@ public class Cart {
     private String cartId;
     private Map<String, CartItem> items;
 
-    public Cart(String userId, String cartId) {
-        this.userId = userId;
+    public Cart(String cartId, String userId) {
         this.cartId = cartId;
+        this.userId = userId;
         this.items = new ConcurrentHashMap<>();
     }
 
