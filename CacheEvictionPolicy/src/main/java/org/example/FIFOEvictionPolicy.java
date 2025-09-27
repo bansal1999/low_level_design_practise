@@ -13,22 +13,36 @@ class FIFOEvictionPolicy extends EvictionPolicy {
 
     @Override
     public String get(int key) {
-        CacheNode node  =  cache.get(key);
+        CacheNode node = cache.get(key);
         return node != null ? node.value : null;
     }
 
     @Override
     public void put(int key, String value) {
+        if (cache.containsKey(key)) {
+            cache.get(key).value = value;
+        } else {
+            if (isFull()) {
+                evict();
+            }
+        }
 
+        CacheNode newNode = new CacheNode(key, value);
+        cache.put(key, newNode);
+        insertionOrder.offer(key);
     }
 
     @Override
     public void evict() {
+        if (!insertionOrder.isEmpty()) {
+            int oldestKey = insertionOrder.poll();
+            cache.remove(oldestKey);
+        }
 
     }
 
     @Override
     public boolean isFull() {
-        return false;
+        return cache.size() >= capacity;
     }
 }
